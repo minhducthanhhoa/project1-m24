@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Customers: React.FC = () => {
-  const customers = [
+  const [customers, setCustomers] = useState([
     {
       id: '12542',
       username: 'Rikkei Academy',
@@ -42,11 +42,75 @@ const Customers: React.FC = () => {
       date: '22 Feb, 2022',
       active: true
     }
-  ];
+  ]);
+
+  const [newCustomer, setNewCustomer] = useState({
+    id: '',
+    username: '',
+    email: '',
+    role: 'User',
+    date: new Date().toLocaleDateString(),
+    active: true
+  });
+
+  const [showForm, setShowForm] = useState(false);
+
+  const addCustomer = () => {
+    setCustomers([...customers, newCustomer]);
+    setNewCustomer({
+      id: '',
+      username: '',
+      email: '',
+      role: 'User',
+      date: new Date().toLocaleDateString(),
+      active: true
+    });
+    setShowForm(false);
+  };
+
+  const toggleActive = (id: string) => {
+    setCustomers(customers.map(customer => 
+      customer.id === id ? { ...customer, active: !customer.active } : customer
+    ));
+  };
 
   return (
     <div className="customers p-4">
       <h2 className="text-2xl font-bold mb-4">Customers</h2>
+      <button 
+        onClick={() => setShowForm(!showForm)} 
+        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+      >
+        Thêm User
+      </button>
+
+      {showForm && (
+        <div className="mb-4">
+          <input 
+            type="text" 
+            placeholder="ID" 
+            value={newCustomer.id} 
+            onChange={(e) => setNewCustomer({ ...newCustomer, id: e.target.value })}
+            className="border p-2 mr-2"
+          />
+          <input 
+            type="text" 
+            placeholder="Username" 
+            value={newCustomer.username} 
+            onChange={(e) => setNewCustomer({ ...newCustomer, username: e.target.value })}
+            className="border p-2 mr-2"
+          />
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={newCustomer.email} 
+            onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
+            className="border p-2 mr-2"
+          />
+          <button onClick={addCustomer} className="bg-blue-500 text-white px-4 py-2 rounded">Add User</button>
+        </div>
+      )}
+
       <table className="min-w-full bg-white">
         <thead>
           <tr>
@@ -67,7 +131,10 @@ const Customers: React.FC = () => {
               <td className="py-2 px-4 border-b">{customer.role}</td>
               <td className="py-2 px-4 border-b">{customer.date}</td>
               <td className="py-2 px-4 border-b">
-                <button className={`bg-blue-500 text-white px-2 py-1 rounded mr-2 ${customer.active ? 'bg-green-500' : 'bg-red-500'}`}>
+                <button 
+                  onClick={() => toggleActive(customer.id)} 
+                  className={`text-white px-2 py-1 rounded mr-2 ${customer.active ? 'bg-green-500' : 'bg-red-500'}`}
+                >
                   {customer.active ? 'Active' : 'Inactive'}
                 </button>
                 <button className="bg-blue-500 text-white px-2 py-1 rounded">View</button>

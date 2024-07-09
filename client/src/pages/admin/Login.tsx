@@ -27,7 +27,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
 
   return (
     <div className="login p-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
+      <h2 className="text-2xl font-bold mb-4">Đăng nhập vào admin</h2>
       {error && <p className="text-red-500">{error}</p>}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Username</label>
